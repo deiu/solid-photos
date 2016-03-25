@@ -1,446 +1,463 @@
 <!DOCTYPE html>
 <html >
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-    <title>Solid Photo Album</title>
-    <link rel="shortcut icon" href="https://avatars3.githubusercontent.com/u/14262490?v=3&s=200"/>
-    <style>
-        *{margin:0;padding:0;}
-        body {
-          background: #111;
-          font-family: 'Open Sans', sans-serif;
-          color: #fff;
-          overflow-x: hidden;
-        }
-        header{
-          position: absolute;
-          z-index: 9999;
-          width: 100%;
-          background: rgba(0,0,0,.5);
-        }
-        h1, h2, h3{
-            font-family: 'Open Sans Condensed', sans-serif;
-            font-weight: 700;
-            margin: .8em 0 .2em 0;
-        }
-        h1{
-         margin: .2em .5em;
-         display: inline-block;
-        }
-        header p{
-         display: inline-block;
-         font-size: .9em;
-        }
-        .content{
-            margin: 1em 2em;
-        }
-        .content ul, .content ol{
-            margin: .8em 1em .8em 2em;
-        }
-        span.code{
-            font-family: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream Vera Sans Mono", monospace;
-            color: #999;
-        }
-        .gist{
-            margin: 1em 1em 2em 2em;
-        }
-        ol .gist{
-            margin: 1em 0 2em 0;
-        }
-        a{
-            color:#fff;
-        }
-        #pics{
-            width: 85%;
-            margin: 2em auto;
-        }
-        footer{
-            color: #ccc;
-            font-size: .8em;
-            font-style: italic;
-            text-align: center;
-            background: #000;
-            padding: 1.5em 0 .5em 0;
-            margin-top: 5em;
-        }
-        footer span{
-            font-size: 1.3em;
-            color: #fff;
-        }
-        @media screen and (max-width: 830px){
-            h1{
-             font-size: 1.3em;
-            }
-            .desc{
-                display: none;
-            }
-        }
-
-        @media screen and (max-width: 400px){
-            h1{
-             font-size: 1.1em;
-            }
-            header span{
-                display: none;
-            }
-            .gist{
-                width: 100%;
-            }
-        }
-        .bss-slides{
-          position: relative;
-          display: block;
-        }
-        .bss-slides:focus{
-         outline: 0;
-        }
-        .bss-slides figure{
-          position: absolute;
-          top: 0;
-          width: 100%;
-        }
-        .bss-slides figure:first-child{
-          position: relative;
-        }
-        .bss-slides figure img{
-          opacity: 0;
-          -webkit-transition: opacity 1.2s;
-          transition: opacity 1.2s;
-          -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
-        }
-        .bss-slides .bss-show{
-          z-index: 2;
-        }
-        .bss-slides .bss-show img{
-          opacity: 1;
-          -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
-          position: relative;
-        }
-
-        .bss-slides figcaption{
-          position: absolute;
-          font-family: sans-serif;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>Solid Photo Album</title>
+  <link rel="shortcut icon" href="https://avatars3.githubusercontent.com/u/14262490?v=3&s=200"/>
+  <style>
+      *{margin:0;padding:0;}
+      body {
+        background: #111;
+        font-family: 'Open Sans', sans-serif;
+        color: #fff;
+        overflow-x: hidden;
+      }
+      header{
+        position: absolute;
+        z-index: 9999;
+        width: 100%;
+        background: rgba(0,0,0,.5);
+      }
+      h1, h2, h3{
+          font-family: 'Open Sans Condensed', sans-serif;
+          font-weight: 700;
+          margin: .8em 0 .2em 0;
+      }
+      h1{
+       margin: .2em .5em;
+       display: inline-block;
+      }
+      header p{
+       display: inline-block;
+       font-size: .9em;
+      }
+      .content{
+          margin: 1em 2em;
+      }
+      .content ul, .content ol{
+          margin: .8em 1em .8em 2em;
+      }
+      span.code{
+          font-family: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream Vera Sans Mono", monospace;
+          color: #999;
+      }
+      .gist{
+          margin: 1em 1em 2em 2em;
+      }
+      ol .gist{
+          margin: 1em 0 2em 0;
+      }
+      a{
+          color:#fff;
+      }
+      #pics{
+          width: 85%;
+          margin: 2em auto;
+      }
+      footer{
+          color: #ccc;
           font-size: .8em;
-          bottom: .75em;
-          right: .35em;
-          padding: .25em;
+          font-style: italic;
+          text-align: center;
+          padding: 1.5em 0 .5em 0;
+          margin-top: 5em;
+      }
+      footer span{
+          font-size: 1.3em;
           color: #fff;
-          background: #000;
-          background: rgba(0,0,0, .25);
-          border-radius: 2px;
-          opacity: 0;
-          -webkit-transition: opacity 1.2s;
-          transition: opacity 1.2s;
-        }
-        .bss-slides .bss-show figcaption{
-          z-index: 3;
-          opacity: 1;
-        }
-        .bss-slides figcaption a{
-          color: #fff;
-        }
-        .bss-next, .bss-prev{
-          color: #fff;
-          position: absolute;
-          background: #000;
-          background: rgba(0,0,0, .6);
-          top: 50%;
-          z-index: 4;
-          font-size: 2em;
-          margin-top: -1.2em;
-          opacity: .3;
-          -webkit-user-select: none;
-          -moz-user-select: none;
-          -ms-user-select: none;
-          user-select: none;
-        }
-        .bss-next:hover, .bss-prev:hover{
-          cursor: pointer;
-          opacity: 1;
-        }
-        .bss-next{
-          right: -1px;
-          padding: 10px 5px 15px 10px;
-          border-top-left-radius: 3px;
-          border-bottom-left-radius: 3px;
-        }
-        .bss-prev{
-          left: 0;
-          padding: 10px 10px 15px 5px;
-          border-top-right-radius: 3px;
-          border-bottom-right-radius: 3px;
-        }
-        .bss-fullscreen{
-          display: block;
-          width: 32px;
-          height: 32px;
-          background: rgba(0,0,0,.4) url(https://leemark.github.io/better-simple-slideshow/img/arrows-alt_ffffff_64.png);
+      }
+      @media screen and (max-width: 830px){
+          h1{
+           font-size: 1.3em;
+          }
+          .desc{
+              display: none;
+          }
+      }
+
+      @media screen and (max-width: 400px){
+          h1{
+           font-size: 1.1em;
+          }
+          header span{
+              display: none;
+          }
+          .gist{
+              width: 100%;
+          }
+      }
+      .bss-slides{
+        position: relative;
+        display: block;
+      }
+      .bss-slides:focus{
+       outline: 0;
+      }
+      .bss-slides figure{
+        position: absolute;
+        top: 0;
+        width: 100%;
+      }
+      .bss-slides figure:first-child{
+        position: relative;
+      }
+      .bss-slides figure img{
+        opacity: 0;
+        -webkit-transition: opacity 1.2s;
+        transition: opacity 1.2s;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+      }
+      .bss-slides .bss-show{
+        z-index: 2;
+      }
+      .bss-slides .bss-show img{
+        opacity: 1;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        position: relative;
+      }
+
+      .bss-slides figcaption{
+        position: absolute;
+        font-family: sans-serif;
+        font-size: .8em;
+        bottom: .75em;
+        right: .35em;
+        padding: .25em;
+        color: #fff;
+        background: #000;
+        background: rgba(0,0,0, .25);
+        border-radius: 2px;
+        opacity: 0;
+        -webkit-transition: opacity 1.2s;
+        transition: opacity 1.2s;
+      }
+      .bss-slides .bss-show figcaption{
+        z-index: 3;
+        opacity: 1;
+      }
+      .bss-slides figcaption a{
+        color: #fff;
+      }
+      .bss-next, .bss-prev{
+        color: #fff;
+        position: absolute;
+        background: #000;
+        background: rgba(0,0,0, .6);
+        top: 50%;
+        z-index: 4;
+        font-size: 2em;
+        margin-top: -1.2em;
+        opacity: .3;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      .bss-next:hover, .bss-prev:hover{
+        cursor: pointer;
+        opacity: 1;
+      }
+      .bss-next{
+        right: -1px;
+        padding: 10px 5px 15px 10px;
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+      }
+      .bss-prev{
+        left: 0;
+        padding: 10px 10px 15px 5px;
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
+      }
+      .bss-fullscreen{
+        display: block;
+        width: 32px;
+        height: 32px;
+        background: rgba(0,0,0,.4) url(https://leemark.github.io/better-simple-slideshow/img/arrows-alt_ffffff_64.png);
+        -webkit-background-size: contain;
+        background-size: contain;
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        cursor: pointer;
+        opacity: .3;
+        z-index: 10;
+      }
+      .bss-fullscreen:hover{
+        opacity: .8;
+      }
+      :-webkit-full-screen .bss-fullscreen{
+          background: rgba(0,0,0,.4) url(https://leemark.github.io/better-simple-slideshow/img//compress_ffffff_64.png);
           -webkit-background-size: contain;
           background-size: contain;
-          position: absolute;
-          top: 5px;
-          left: 5px;
-          cursor: pointer;
-          opacity: .3;
-          z-index: 10;
-        }
-        .bss-fullscreen:hover{
-          opacity: .8;
-        }
-        :-webkit-full-screen .bss-fullscreen{
-            background: rgba(0,0,0,.4) url(https://leemark.github.io/better-simple-slideshow/img//compress_ffffff_64.png);
-            -webkit-background-size: contain;
-            background-size: contain;
-        }
-        :-moz-full-screen .bss-fullscreen{
-            background: rgba(0,0,0,.4) url(https://leemark.github.io/better-simple-slideshow/img/compress_ffffff_64.png);
-            background-size: contain;
-        }
-        :-ms-fullscreen .bss-fullscreen{
-            background: rgba(0,0,0,.4) url(https://leemark.github.io/better-simple-slideshow/img/compress_ffffff_64.png);
-            background-size: contain;
-        }
-        :full-screen .bss-fullscreen{
-            background: rgba(0,0,0,.4) url(https://leemark.github.io/better-simple-slideshow/img/compress_ffffff_64.png);
-            -webkit-background-size: contain;
-            background-size: contain;
-        }
-        :-webkit-full-screen .bss-fullscreen{
-            background: rgba(0,0,0,.4) url(https://leemark.github.io/better-simple-slideshow/img/compress_ffffff_64.png);
-            -webkit-background-size: contain;
-            background-size: contain;
-        }
-        :-moz-full-screen .bss-fullscreen{
-            background: rgba(0,0,0,.4) url(https://leemark.github.io/better-simple-slideshow/img/compress_ffffff_64.png);
-            background-size: contain;
-        }
-        :-ms-fullscreen .bss-fullscreen{
-            background: rgba(0,0,0,.4) url(https://leemark.github.io/better-simple-slideshow/img/compress_ffffff_64.png);
-            background-size: contain;
-        }
-        :fullscreen .bss-fullscreen{
-            background: rgba(0,0,0,.4) url(https://leemark.github.io/better-simple-slideshow/img/compress_ffffff_64.png);
-            -webkit-background-size: contain;
-            background-size: contain;
-        }
-    </style>
+      }
+      :-moz-full-screen .bss-fullscreen{
+          background: rgba(0,0,0,.4) url(https://leemark.github.io/better-simple-slideshow/img/compress_ffffff_64.png);
+          background-size: contain;
+      }
+      :-ms-fullscreen .bss-fullscreen{
+          background: rgba(0,0,0,.4) url(https://leemark.github.io/better-simple-slideshow/img/compress_ffffff_64.png);
+          background-size: contain;
+      }
+      :full-screen .bss-fullscreen{
+          background: rgba(0,0,0,.4) url(https://leemark.github.io/better-simple-slideshow/img/compress_ffffff_64.png);
+          -webkit-background-size: contain;
+          background-size: contain;
+      }
+      :-webkit-full-screen .bss-fullscreen{
+          background: rgba(0,0,0,.4) url(https://leemark.github.io/better-simple-slideshow/img/compress_ffffff_64.png);
+          -webkit-background-size: contain;
+          background-size: contain;
+      }
+      :-moz-full-screen .bss-fullscreen{
+          background: rgba(0,0,0,.4) url(https://leemark.github.io/better-simple-slideshow/img/compress_ffffff_64.png);
+          background-size: contain;
+      }
+      :-ms-fullscreen .bss-fullscreen{
+          background: rgba(0,0,0,.4) url(https://leemark.github.io/better-simple-slideshow/img/compress_ffffff_64.png);
+          background-size: contain;
+      }
+      :fullscreen .bss-fullscreen{
+          background: rgba(0,0,0,.4) url(https://leemark.github.io/better-simple-slideshow/img/compress_ffffff_64.png);
+          -webkit-background-size: contain;
+          background-size: contain;
+      }
+  </style>
 </head>
 
 <body>
-    <div class="bss-slides pics" id="pics" tabindex="1" autofocus="autofocus"></div>
+  <div class="bss-slides pics" id="pics" tabindex="1" autofocus="autofocus"></div>
 
-    <footer>
-        <div class="center-text"><a href="https://deiu.github.io/solid-photos/" target="_blank">GitHub Page</a> | <a href="https://deiu.github.io/solid-photos/issues" target="_blank">GitHub Issues</a></div>
-    </footer>
+  <footer>
+    <div class="center-text"><a href="https://deiu.github.io/solid-photos/" target="_blank">GitHub Page</a> | <a href="https://deiu.github.io/solid-photos/issues" target="_blank">GitHub Issues</a></div>
+  </footer>
 
-    <script src="https://solid.github.io/releases/rdflib.js/rdflib-0.5.0.min.js"></script>
-    <script src="https://solid.github.io/releases/solid.js/solid-0.13.0.min.js"></script>
-    <script>
-        var div = document.getElementById("pics")
-        var extensions = ['jpg', 'jpeg', 'gif', 'png', 'svg']
+  <script src="https://solid.github.io/releases/rdflib.js/rdflib-0.5.0.min.js"></script>
+  <script src="https://solid.github.io/releases/solid.js/solid-0.13.0.min.js"></script>
+  <script>
+    // Using https://github.com/leemark/better-simple-slideshow as reference code for the slideshow
+    var div = document.getElementById("pics")
+    var extensions = ['jpg', 'jpeg', 'gif', 'png', 'svg']
 
-        var makeBSS = function (el, options) {
-            var $slideshows = document.querySelectorAll(el), // a collection of all of the slideshow
-                $slideshow = {},
-                Slideshow = {
-                    init: function (el, options) {
-                        this.el = el; // current slideshow container
-                        this.$items = el.querySelectorAll('figure'); // a collection of all of the slides, caching for performance
-                        this.numItems = this.$items.length; // total number of slides
-                        options = options || {}; // if options object not passed in, then set to empty object
-                        options.auto = options.auto || false; // if options.auto object not passed in, then set to false
-                        this.opts = {
-                            auto: (typeof options.auto === "undefined") ? false : options.auto,
-                            speed: (typeof options.auto.speed === "undefined") ? 1500 : options.auto.speed,
-                            pauseOnHover: (typeof options.auto.pauseOnHover === "undefined") ? false : options.auto.pauseOnHover,
-                            fullScreen: (typeof options.fullScreen === "undefined") ? false : options.fullScreen,
-                            swipe: (typeof options.swipe === "undefined") ? false : options.swipe
-                        };
-                        this.$items[0].classList.add('bss-show'); // add show class to first figure
-                        this.injectControls(el);
-                        this.addEventListeners(el);
-                        if (this.opts.auto) {
-                            this.autoCycle(this.el, this.opts.speed, this.opts.pauseOnHover);
-                        }
-                        if (this.opts.fullScreen) {
-                            this.addFullScreen(this.el);
-                        }
-                        if (this.opts.swipe) {
-                            this.addSwipe(this.el);
-                        }
-                        this.counter = (options.current && options.current <= this.numItems)?options.current:0; // to keep track of current slide
-                        if (this.counter > 0) {
-                            this.showCurrent(0)
-                        }
-                    },
-                    showCurrent: function (i) {
-                        // increment or decrement this.counter depending on whether i === 1 or i === -1
-                        if (i > 0) {
-                            this.counter = (this.counter + 1 === this.numItems) ? 0 : this.counter + 1;
-                        } else {
-                            this.counter = (this.counter - 1 < 0) ? this.numItems - 1 : this.counter - 1;
-                        }
-
-                        // remove .show from whichever element currently has it
-                        // http://stackoverflow.com/a/16053538/2006057
-                        [].forEach.call(this.$items, function (el) {
-                            el.classList.remove('bss-show');
-                        });
-                        // add .show to the one item that's supposed to have it
-                        this.$items[this.counter].classList.add('bss-show');
-                        // update URL to the current image
-                        window.location.hash = '#' + (this.counter + 1);
-                    },
-                    injectControls: function (el) {
+    var makeBSS = function (el, options, images) {
+        var $slideshows = document.querySelectorAll(el), // a collection of all of the slideshow
+            $slideshow = {},
+            Slideshow = {
+                init: function (el, options, images) {
+                    this.el = el; // current slideshow container
+                    this.$items = el.querySelectorAll('figure'); // a collection of all of the slides, caching for performance
+                    this.numItems = images.length; // total number of slides
+                    options = options || {}; // if options object not passed in, then set to empty object
+                    options.auto = options.auto || false; // if options.auto object not passed in, then set to false
+                    this.opts = {
+                        auto: (typeof options.auto === "undefined") ? false : options.auto,
+                        speed: (typeof options.auto.speed === "undefined") ? 1500 : options.auto.speed,
+                        pauseOnHover: (typeof options.auto.pauseOnHover === "undefined") ? false : options.auto.pauseOnHover,
+                        fullScreen: (typeof options.fullScreen === "undefined") ? false : options.fullScreen,
+                        swipe: (typeof options.swipe === "undefined") ? false : options.swipe
+                    };
+                    if (this.opts.auto) {
+                        this.autoCycle(this.el, this.opts.speed, this.opts.pauseOnHover);
+                    }
+                    if (this.opts.fullScreen) {
+                        this.addFullScreen(this.el);
+                    }
+                    if (this.opts.swipe) {
+                        this.addSwipe(this.el);
+                    }
+                    // keep track of current slide
+                    this.counter = (options.current && options.current <= this.numItems)?options.current:0;
+                    if (this.counter >= 0) {
+                        this.showCurrent(this.counter)
+                    }
+                    this.$items[0].classList.add('bss-show'); // add show class to first figure
+                    this.injectControls(el);
+                    this.addEventListeners(el);
+                },
+                showCurrent: function () {
+                    // update URL to the current image
+                    var hewHash = (this.counter === this.numItems - 1)?this.numItems:this.counter + 1;
+                    window.location.hash = '#' + hewHash;
+                    // remove .show from whichever element currently has it
+                    [].forEach.call(this.$items, function (el) {
+                        el.classList.remove('bss-show');
+                    });
+                    // load image
+                    this.$items[this.counter].querySelector('img').setAttribute('src', images[this.counter])
+                    // load previous and next image (to speed up the browsing experience)
+                    var prev = (this.counter === 0)?this.numItems - 1:this.counter - 1;
+                    var next = (this.counter === this.numItems - 1)?0:this.counter + 1;
+                    // prev
+                    this.$items[prev].querySelector('img').setAttribute('src', images[prev])
+                    // next
+                    this.$items[next].querySelector('img').setAttribute('src', images[next]);
+                    // add .show to the one item that's supposed to have it
+                    this.$items[this.counter].classList.add('bss-show');
+                    // increment or decrement this.counter depending on whether i === 1 or i === -1
+                },
+                showPrev: function() {
+                    var prevCount = this.counter;
+                    this.counter = (this.counter - 1 < 0) ? this.numItems - 1 : this.counter - 1;
+                    this.showCurrent()
+                },
+                showNext: function() {
+                    var prevCount = this.counter;
+                    this.counter = (this.counter + 1 === this.numItems) ? 0 : this.counter + 1;
+                    this.showCurrent()
+                },
+                injectControls: function (el) {
                     // build and inject prev/next controls
-                        // first create all the new elements
-                        var spanPrev = document.createElement("span"),
-                            spanNext = document.createElement("span"),
-                            docFrag = document.createDocumentFragment();
+                    // first create all the new elements
+                    var spanPrev = document.createElement("span"),
+                        spanNext = document.createElement("span"),
+                        docFrag = document.createDocumentFragment();
 
-                        // add classes
-                        spanPrev.classList.add('bss-prev');
-                        spanNext.classList.add('bss-next');
+                    // add classes
+                    spanPrev.classList.add('bss-prev');
+                    spanNext.classList.add('bss-next');
 
-                        // add contents
-                        spanPrev.innerHTML = '&laquo;';
-                        spanNext.innerHTML = '&raquo;';
+                    // add contents
+                    spanPrev.innerHTML = '&laquo;';
+                    spanNext.innerHTML = '&raquo;';
 
-                        // append elements to fragment, then append fragment to DOM
-                        docFrag.appendChild(spanPrev);
-                        docFrag.appendChild(spanNext);
-                        el.appendChild(docFrag);
-                    },
-                    addEventListeners: function (el) {
-                        var that = this;
-                        el.querySelector('.bss-next').addEventListener('click', function () {
+                    // append elements to fragment, then append fragment to DOM
+                    docFrag.appendChild(spanPrev);
+                    docFrag.appendChild(spanNext);
+                    el.appendChild(docFrag);
+                },
+                addEventListeners: function (el) {
+                    var that = this;
+                    el.querySelector('.bss-next').addEventListener('click', function () {
+                        that.showNext(); // increment & show
+                    }, false);
+
+                    el.querySelector('.bss-prev').addEventListener('click', function () {
+                        that.showPrev(); // decrement & show
+                    }, false);
+
+                    el.onkeydown = function (e) {
+                        e = e || window.event;
+                        if (e.keyCode === 37) {
+                            that.showPrev(); // decrement & show
+                        } else if (e.keyCode === 39) {
+                            that.showNext(); // increment & show
+                        }
+                    };
+                },
+                autoCycle: function (el, speed, pauseOnHover) {
+                    var that = this,
+                        interval = window.setInterval(function () {
                             that.showCurrent(1); // increment & show
-                        }, false);
+                        }, speed);
 
-                        el.querySelector('.bss-prev').addEventListener('click', function () {
-                            that.showCurrent(-1); // decrement & show
+                    if (pauseOnHover) {
+                        el.addEventListener('mouseover', function () {
+                            interval = clearInterval(interval);
                         }, false);
-
-                        el.onkeydown = function (e) {
-                            e = e || window.event;
-                            if (e.keyCode === 37) {
-                                that.showCurrent(-1); // decrement & show
-                            } else if (e.keyCode === 39) {
-                                that.showCurrent(1); // increment & show
-                            }
-                        };
-                    },
-                    autoCycle: function (el, speed, pauseOnHover) {
-                        var that = this,
+                        el.addEventListener('mouseout', function () {
                             interval = window.setInterval(function () {
                                 that.showCurrent(1); // increment & show
                             }, speed);
-
-                        if (pauseOnHover) {
-                            el.addEventListener('mouseover', function () {
-                                interval = clearInterval(interval);
-                            }, false);
-                            el.addEventListener('mouseout', function () {
-                                interval = window.setInterval(function () {
-                                    that.showCurrent(1); // increment & show
-                                }, speed);
-                            }, false);
-                        } // end pauseonhover
-
-                    },
-                    addFullScreen: function(el){
-                        var that = this,
-                        fsControl = document.createElement("span");
-
-                        fsControl.classList.add('bss-fullscreen');
-                        el.appendChild(fsControl);
-                        el.querySelector('.bss-fullscreen').addEventListener('click', function () {
-                            that.toggleFullScreen(el);
                         }, false);
-                    },
-                    addSwipe: function(el){
-                        var that = this,
-                            ht = new Hammer(el);
-                        ht.on('swiperight', function(e) {
-                            that.showCurrent(-1); // decrement & show
-                        });
-                        ht.on('swipeleft', function(e) {
-                            that.showCurrent(1); // increment & show
-                        });
-                    },
-                    toggleFullScreen: function(el){
-                        // https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Using_full_screen_mode
-                        if (!document.fullscreenElement &&    // alternative standard method
-                            !document.mozFullScreenElement && !document.webkitFullscreenElement &&
-                            !document.msFullscreenElement ) {  // current working methods
-                            if (document.documentElement.requestFullscreen) {
-                              el.requestFullscreen();
-                            } else if (document.documentElement.msRequestFullscreen) {
-                              el.msRequestFullscreen();
-                            } else if (document.documentElement.mozRequestFullScreen) {
-                              el.mozRequestFullScreen();
-                            } else if (document.documentElement.webkitRequestFullscreen) {
-                              el.webkitRequestFullscreen(el.ALLOW_KEYBOARD_INPUT);
-                            }
-                        } else {
-                            if (document.exitFullscreen) {
-                              document.exitFullscreen();
-                            } else if (document.msExitFullscreen) {
-                              document.msExitFullscreen();
-                            } else if (document.mozCancelFullScreen) {
-                              document.mozCancelFullScreen();
-                            } else if (document.webkitExitFullscreen) {
-                              document.webkitExitFullscreen();
-                            }
+                    } // end pauseonhover
+
+                },
+                addFullScreen: function(el){
+                    var that = this,
+                    fsControl = document.createElement("span");
+
+                    fsControl.classList.add('bss-fullscreen');
+                    el.appendChild(fsControl);
+                    el.querySelector('.bss-fullscreen').addEventListener('click', function () {
+                        that.toggleFullScreen(el);
+                    }, false);
+                },
+                addSwipe: function(el){
+                    var that = this,
+                        ht = new Hammer(el);
+                    ht.on('swiperight', function(e) {
+                        that.showCurrent(-1); // decrement & show
+                    });
+                    ht.on('swipeleft', function(e) {
+                        that.showCurrent(1); // increment & show
+                    });
+                },
+                toggleFullScreen: function(el){
+                    // https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Using_full_screen_mode
+                    if (!document.fullscreenElement &&    // alternative standard method
+                        !document.mozFullScreenElement && !document.webkitFullscreenElement &&
+                        !document.msFullscreenElement ) {  // current working methods
+                        if (document.documentElement.requestFullscreen) {
+                          el.requestFullscreen();
+                        } else if (document.documentElement.msRequestFullscreen) {
+                          el.msRequestFullscreen();
+                        } else if (document.documentElement.mozRequestFullScreen) {
+                          el.mozRequestFullScreen();
+                        } else if (document.documentElement.webkitRequestFullscreen) {
+                          el.webkitRequestFullscreen(el.ALLOW_KEYBOARD_INPUT);
                         }
-                    } // end toggleFullScreen
-
-                }; // end Slideshow object .....
-
-            // make instances of Slideshow as needed
-            [].forEach.call($slideshows, function (el) {
-                $slideshow = Object.create(Slideshow);
-                $slideshow.init(el, options);
-            });
-        };
-
-        var solid = require('solid')
-        solid.web.list('.').then(function (listing) {
-            if (listing.isEmpty()) {
-                // show empty
-                console.log("Empty container")
-                return
-            }
-
-            listing.contentsUris.forEach(function (uri) {
-                var ext = uri.substr(uri.lastIndexOf('.') + 1).toLowerCase()
-                if (ext && ext.length > 0) {
-                    for (var i=0; i<extensions.length; i++) {
-                        if (extensions[i] === ext) {
-                            var figure = div.appendChild(document.createElement('figure'))
-                            var img = figure.appendChild(document.createElement('img'))
-                            img.setAttribute('src', uri)
-                            img.setAttribute('width', '100%')
-                            break
+                    } else {
+                        if (document.exitFullscreen) {
+                          document.exitFullscreen();
+                        } else if (document.msExitFullscreen) {
+                          document.msExitFullscreen();
+                        } else if (document.mozCancelFullScreen) {
+                          document.mozCancelFullScreen();
+                        } else if (document.webkitExitFullscreen) {
+                          document.webkitExitFullscreen();
                         }
                     }
-                }
-            })
+                } // end toggleFullScreen
 
-            // finish by setting up the slideshow
-            var current = (window.location.hash.length)?parseInt(window.location.hash.substr(1)) - 1:0;
-            console.log('Current:',current)
-            var opts = {
-                auto : false,
-                fullScreen : true,
-                swipe : false,
-                current: current
+            }; // end Slideshow object .....
+
+        // make instances of Slideshow as needed
+        [].forEach.call($slideshows, function (el) {
+            $slideshow = Object.create(Slideshow);
+            $slideshow.init(el, options, images);
+        });
+    };
+
+    var solid = require('solid')
+    solid.web.list('.').then(function (listing) {
+        if (listing.isEmpty()) {
+            // show empty
+            console.log("Empty container")
+            return
+        }
+
+        var images = []
+
+        listing.contentsUris.forEach(function (uri) {
+            var ext = uri.substr(uri.lastIndexOf('.') + 1).toLowerCase()
+            if (ext && ext.length > 0) {
+                for (var i=0; i<extensions.length; i++) {
+                    if (extensions[i] === ext) {
+                        var figure = div.appendChild(document.createElement('figure'))
+                        var img = figure.appendChild(document.createElement('img'))
+                        // img.setAttribute('src', uri)
+                        img.setAttribute('width', '100%')
+                        images.push(uri)
+                        break
+                    }
+                }
             }
-            makeBSS('.pics', opts)
         })
-    </script>
+
+        // finish by setting up the slideshow
+        var hashVal = (window.location.hash.substr(1).length > 0)?parseInt(window.location.hash.substr(1)):0;
+        var current = (hashVal === 1)?0:hashVal;
+        var opts = {
+            auto : false,
+            fullScreen : true,
+            swipe : false,
+            current: current
+        }
+        makeBSS('.pics', opts, images)
+    })
+  </script>
 </body>
 </html>
