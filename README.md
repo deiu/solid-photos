@@ -1,5 +1,5 @@
 # solid-photos
-Very basic photo browser / album using Solid
+Very basic photo browser / album using Solid and an improved version of the [better-simple-slideshow](https://github.com/leemark/better-simple-slideshow) library.
 
 ## Installation and usage
 
