@@ -422,7 +422,11 @@
     };
 
     var solid = require('solid')
-    solid.web.list('.').then(function (listing) {
+    var doc = window.location.pathname
+    if (doc.lastIndexOf('index.html') === doc.length - 'index.html'.length) {
+      doc = doc.substr(0, v.lastIndexOf('index.html'))
+    }
+    solid.web.list(doc).then(function (listing) {
         if (listing.isEmpty()) {
             // show empty
             console.log("Empty container")
